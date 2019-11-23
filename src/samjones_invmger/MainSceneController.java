@@ -27,6 +27,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert.AlertType; 
+import javafx.scene.control.Alert; 
 
 /**
  * FXML Controller class
@@ -145,7 +147,7 @@ public class MainSceneController implements Initializable {
         if(PartTable.getSelectionModel().getSelectedItem()!= null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyPart.fxml"));
-                View_Controller.ModifyPartController controller = new View_Controller.ModifyPartController(inv, PartTable.getSelectionModel().getSelectedItem().getId());
+                View_Controller.ModifyPartController controller = new View_Controller.ModifyPartController(inv, PartTable.getSelectionModel().getSelectedItem());
                 loader.setController(controller);
                 Scene scene = new Scene(loader.load());
                 Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
@@ -155,6 +157,11 @@ public class MainSceneController implements Initializable {
             } catch (IOException ex) {
                 Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
             }   
+        } else {
+            Alert warning = new Alert(AlertType.WARNING);
+            warning.setContentText("Part must be Selected");
+            warning.setHeaderText("Modify Part: No Part Selected");
+            warning.show();
         }
     }
 

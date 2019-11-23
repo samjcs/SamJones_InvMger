@@ -35,7 +35,7 @@ import java.lang.Double;
  */
 public class ModifyPartController implements Initializable {
     Inventory inv;
-    int partId;
+    Part modifyPart;
     InhousePart inhousePart;
     OutsourcedPart outsourcePart;
     
@@ -75,29 +75,24 @@ public class ModifyPartController implements Initializable {
     @FXML
     private Button ModifyPartCancelButton;
 
-    public ModifyPartController(Inventory inv, int partId) {
+    public ModifyPartController(Inventory inv, Part modifyPart) {
         this.inv = inv;
-        this.partId = partId;
+        this.modifyPart = modifyPart;
     }
     
-    private void populateOutsourcedPartData() {
-        ModifyPartIDTextField.setText(Integer.toString(outsourcePart.getId()));
-        ModifyPartNameTextField.setText(outsourcePart.getName());
-        ModifyPartInvTextField.setText(Integer.toString(outsourcePart.getStock()));
-        ModifyPartPriceTextField.setText(Double.toString(outsourcePart.getPrice()));
-        ModifyPartInvMaxTextField.setText(Integer.toString(outsourcePart.getMax()));
-        ModifyPartInvMinTextField.setText(Integer.toString(outsourcePart.getMin()));
-        ModifyPartMachineCompanyTextField.setText(outsourcePart.getCompanyName());
-    }
-    
-    private void populateInhousePartData() {
-        ModifyPartIDTextField.setText(Integer.toString(inhousePart.getId()));
-        ModifyPartNameTextField.setText(inhousePart.getName());
-        ModifyPartInvTextField.setText(Integer.toString(inhousePart.getStock()));
-        ModifyPartPriceTextField.setText(Double.toString(inhousePart.getPrice()));
-        ModifyPartInvMaxTextField.setText(Integer.toString(inhousePart.getMax()));
-        ModifyPartInvMinTextField.setText(Integer.toString(inhousePart.getMin()));
-        ModifyPartMachineCompanyTextField.setText(Integer.toString(inhousePart.getMachineId()));
+    private void populatePartData() {
+        ModifyPartIDTextField.setText(Integer.toString(modifyPart.getId()));
+        ModifyPartNameTextField.setText(modifyPart.getName());
+        ModifyPartInvTextField.setText(Integer.toString(modifyPart.getStock()));
+        ModifyPartPriceTextField.setText(Double.toString(modifyPart.getPrice()));
+        ModifyPartInvMaxTextField.setText(Integer.toString(modifyPart.getMax()));
+        ModifyPartInvMinTextField.setText(Integer.toString(modifyPart.getMin()));
+        
+        if(inhousePart != null) {
+            ModifyPartMachineCompanyTextField.setText(Integer.toString(inhousePart.getMachineId()));
+        } else {
+            ModifyPartMachineCompanyTextField.setText(outsourcePart.getCompanyName());
+        }
     }
 
     @Override
@@ -105,24 +100,22 @@ public class ModifyPartController implements Initializable {
         ToggleGroup radioGroup = new ToggleGroup();
         ModifyInhousePartRadio.setToggleGroup(radioGroup);
         ModifyOutsourcedPartRadio.setToggleGroup(radioGroup);
-        ObservableList<Part> partInventory = inv.getAllParts();
-        
-        for(Part part : partInventory) {
-            if(part.getId() == this.partId) {
-                if(part instanceof InhousePart) {
-                    this.inhousePart = (InhousePart) part;
-                    ModifyInhousePartRadio.setSelected(true);
-                    ModifyOutsourcedPartRadio.setSelected(false);
-                    populateInhousePartData();
-                } else {
-                    this.outsourcePart = (OutsourcedPart) part;
-                    ModifyOutsourcedPartRadio.setSelected(true);
-                    ModifyInhousePartRadio.setSelected(false);
-                    populateOutsourcedPartData();
-                }
-                
-            }
+            
+        if(modifyPart instanceof InhousePart) {
+            this.inhousePart = (InhousePart) modifyPart;
+            this.outsourcePart = null;
+            ModifyInhousePartRadio.setSelected(true);
+            ModifyOutsourcedPartRadio.setSelected(false);
+ 
+        } else {
+            this.outsourcePart = (OutsourcedPart) modifyPart;
+            this.inhousePart = null;
+            ModifyOutsourcedPartRadio.setSelected(true);
+            ModifyInhousePartRadio.setSelected(false);
         }
+        
+        populatePartData();
+        
     }    
 
 
@@ -142,6 +135,42 @@ public class ModifyPartController implements Initializable {
 
     @FXML
     private void ModifyPartSave(MouseEvent event) {
+        if(ModifyInhousePartRadio.isSelected()) {
+            InhousePart newPart = getNewInhousePartValues();
+            inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+        
+        }
+        
+        if (ModifyOutsourcedPartRadio.isSelected()) {
+            OutsourcedPart newPart = getNewOutsourcedPartValues();
+            inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+        }
+        
+        changeToMainScene(event);
+    }
+    
+      private InhousePart getNewInhousePartValues() {
+            int machineId = Integer.parseInt(ModifyPartMachineCompanyTextField.getText());
+            int id = modifyPart.getId();
+            String name = ModifyPartNameTextField.getText();
+            double price = Double.parseDouble(ModifyPartPriceTextField.getText());
+            int stock = Integer.parseInt(ModifyPartInvTextField.getText());
+            int min = Integer.parseInt(ModifyPartInvMinTextField.getText());
+            int max = Integer.parseInt(ModifyPartInvMaxTextField.getText());
+            
+            return new InhousePart(id, name, price, stock, min, max, machineId);
+    }
+    
+       private OutsourcedPart getNewOutsourcedPartValues() {
+            String companyName = ModifyPartMachineCompanyTextField.getText();
+            int id = modifyPart.getId();
+            String name = ModifyPartNameTextField.getText();
+            double price = Double.parseDouble(ModifyPartPriceTextField.getText());
+            int stock = Integer.parseInt(ModifyPartInvTextField.getText());
+            int min = Integer.parseInt(ModifyPartInvMinTextField.getText());
+            int max = Integer.parseInt(ModifyPartInvMaxTextField.getText());
+            
+            return new OutsourcedPart(id, name, price, stock, min, max, companyName);
     }
 
     @FXML
@@ -152,7 +181,7 @@ public class ModifyPartController implements Initializable {
     private void changeToMainScene(MouseEvent event) {
   
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/samjones_invmger/MainScene.fxml"));
-        samjones_invmger.MainSceneController controller = new samjones_invmger.MainSceneController(inv);
+        samjones_invmger.MainSceneController controller = new samjones_invmger.MainSceneController(this.inv);
         loader.setController(controller);
          
         setStageAndScene(loader, event);   
