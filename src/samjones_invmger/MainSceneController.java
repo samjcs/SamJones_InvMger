@@ -141,19 +141,21 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void ModifyPart(MouseEvent event) throws IOException {
-        Part selectedPart = PartTable.getSelectionModel().getSelectedItem();
-         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyPart.fxml"));
-            View_Controller.ModifyPartController controller = new View_Controller.ModifyPartController(inv, selectedPart.getId());
-            loader.setController(controller);
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        
+        if(PartTable.getSelectionModel().getSelectedItem()!= null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyPart.fxml"));
+                View_Controller.ModifyPartController controller = new View_Controller.ModifyPartController(inv, PartTable.getSelectionModel().getSelectedItem().getId());
+                loader.setController(controller);
+                Scene scene = new Scene(loader.load());
+                Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+            }   
+        }
     }
 
     @FXML
