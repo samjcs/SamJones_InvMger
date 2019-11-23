@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="435.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane id="AnchorPane" prefHeight="435.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="14.0" layoutY="25.0" text="Add Product" />
       <TextField fx:id="AddProductIDTextField" disable="true" layoutX="147.0" layoutY="67.0" onAction="#AddProductID" promptText="Auto Gen - Disabled" />
@@ -28,19 +28,19 @@
       <TextField fx:id="AddProductSearchTextField" layoutX="562.0" layoutY="43.0" onAction="#AddProductSearchText" prefHeight="18.0" prefWidth="310.0" />
       <TableView fx:id="AddProductSearchTable" layoutX="467.0" layoutY="81.0" prefHeight="106.0" prefWidth="374.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Product ID" />
-          <TableColumn prefWidth="99.199951171875" text="Product Name" />
+          <TableColumn prefWidth="75.0" text="Part ID" />
+          <TableColumn prefWidth="99.199951171875" text="Part Name" />
             <TableColumn prefWidth="103.2000732421875" text="Inventory Level" />
-            <TableColumn prefWidth="93.60009765625" text="Product Price" />
+            <TableColumn prefWidth="93.60009765625" text="Part Price" />
         </columns>
       </TableView>
       <Button fx:id="AddProductDeleteButton" layoutX="791.0" layoutY="341.0" mnemonicParsing="false" onAction="#AddProductDelete" prefHeight="0.0" prefWidth="54.0" text="Delete" />
       <TableView fx:id="AddProductDeleteTable" layoutX="467.0" layoutY="226.0" prefHeight="106.0" prefWidth="374.0">
          <columns>
-            <TableColumn prefWidth="75.0" text="Product ID" />
-            <TableColumn prefWidth="99.199951171875" text="Product Name" />
+            <TableColumn prefWidth="75.0" text="Part ID" />
+            <TableColumn prefWidth="99.199951171875" text="Part Name" />
             <TableColumn prefWidth="103.2000732421875" text="Inventory Level" />
-            <TableColumn prefWidth="93.60009765625" text="Product Price" />
+            <TableColumn prefWidth="93.60009765625" text="Part Price" />
          </columns>
       </TableView>
       <Button fx:id="AddProductAddButton" layoutX="797.0" layoutY="190.0" mnemonicParsing="false" onAction="#AddProductAdd" text="Add" />

@@ -67,7 +67,6 @@ public class AddPartController implements Initializable {
 
     public AddPartController(Inventory inv) {
         this.inv = inv;
-        this.partInventory = FXCollections.observableArrayList();
     }
     
     
@@ -106,7 +105,7 @@ public class AddPartController implements Initializable {
     @FXML
     private void AddPartSave(MouseEvent event) {
         int lastId = 0;
-        for(Part part : partInventory) {
+        for(Part part : inv.getAllParts()) {
             if(part.getId() > lastId) {
                 lastId = part.getId();
             }
@@ -150,14 +149,7 @@ public class AddPartController implements Initializable {
     }
     
     private boolean checkInhousePartValues(InhousePart newPart) {
-        Alert alert = new Alert(AlertType.NONE);
-        if(newPart.getName() == "") {
-            alert.setAlertType(AlertType.ERROR);
-            alert.setContentText("Part name must containe a value");
-            alert.setHeaderText("Invalid Part Name");
-            alert.show();
-            return false;
-        }
+      
 
         return true;
     }

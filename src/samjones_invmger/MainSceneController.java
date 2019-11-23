@@ -167,7 +167,8 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void DeletePart(MouseEvent event) {
-        
+        inv.getAllParts().remove(inv.getAllParts().indexOf(PartTable.getSelectionModel().getSelectedItem()));
+        genPartTable();
     }
 
     @FXML
@@ -188,8 +189,7 @@ public class MainSceneController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/AddProduct.fxml"));
             View_Controller.AddProductController controller = new View_Controller.AddProductController(inv);
             loader.setController(controller);
-            Scene scene;
-            scene = new Scene(loader.load());
+            Scene scene = new Scene(loader.load());
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.setResizable(false);
@@ -203,7 +203,7 @@ public class MainSceneController implements Initializable {
     private void ModifyProduct(MouseEvent event) throws IOException {
          try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyProduct.fxml"));
-            View_Controller.ModifyProductController controller = new View_Controller.ModifyProductController(inv);
+            View_Controller.ModifyProductController controller = new View_Controller.ModifyProductController(inv, ProductTable.getSelectionModel().getSelectedItem());
             loader.setController(controller);
             Scene scene; 
             scene = new Scene(loader.load());
