@@ -10,14 +10,14 @@
    <children>
       <Label layoutX="14.0" layoutY="25.0" text="Add Part" />
       <RadioButton fx:id="InhousePartRadio" layoutX="151.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#CheckAddInhousePart" selected="true" text="In-House" />
-      <RadioButton fx:id="OutsourcedPartRadio" layoutX="264.0" layoutY="25.0" mnemonicParsing="false"  onMouseClicked="#CheckAddOutsourcedPart" text="Outsourced" />
+      <RadioButton fx:id="OutsourcedPartRadio" layoutX="264.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#CheckAddOutsourcedPart" text="Outsourced" />
       <TextField fx:id="AddPartIDTextField" disable="true" layoutX="147.0" layoutY="67.0" promptText="Auto Gen - Disabled" />
       <TextField fx:id="AddPartNameTextField" layoutX="147.0" layoutY="101.0" promptText="Part Name" />
       <TextField fx:id="AddPartInvTextField" layoutX="147.0" layoutY="141.0" promptText="Inv" />
       <TextField fx:id="AddPartPriceTextField" layoutX="147.0" layoutY="181.0" promptText="Price/Cost" />
       <TextField fx:id="AddPartInvMaxTextField" layoutX="146.0" layoutY="226.0" prefHeight="26.0" prefWidth="149.0" promptText="Max" />
       <TextField fx:id="AddPartInvMinTextField" layoutX="341.0" layoutY="226.0" prefHeight="26.0" prefWidth="114.0" promptText="Min" />
-      <TextField fx:id="AddPartMachineCompanyTextField" layoutX="146.0" layoutY="270.0" prefHeight="26.0" prefWidth="114.0" promptText="Machine ID" />
+      <TextField fx:id="AddPartMachineCompanyTextField" layoutX="146.0" layoutY="270.0" prefHeight="26.0" prefWidth="310.0" promptText="Machine ID" />
       <Label layoutX="54.0" layoutY="71.0" text="ID" />
       <Label layoutX="52.0" layoutY="105.0" text="Name" />
       <Label layoutX="52.0" layoutY="145.0" text="Inv" />
@@ -25,7 +25,7 @@
       <Label layoutX="55.0" layoutY="231.0" text="Max" />
       <Label layoutX="311.0" layoutY="231.0" text="Min" />
       <Label fx:id="AddPartMachineCompanyLabel" layoutX="54.0" layoutY="274.0" text="Machine ID" />
-      <Button fx:id="AddPartSaveButton" layoutX="285.0" layoutY="346.0" mnemonicParsing="false" onMouseClicked="#AddPartSave" text="Save" />
-      <Button fx:id="AddPartCancelButton" layoutX="341.0" layoutY="346.0" mnemonicParsing="false" onMouseClicked="#AddPartCancel" text="Cancel" />
+      <Button fx:id="AddPartSaveButton" layoutX="481.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#AddPartSave" text="Save" />
+      <Button fx:id="AddPartCancelButton" layoutX="534.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#AddPartCancel" text="Cancel" />
    </children>
 </AnchorPane>

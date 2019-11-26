@@ -27,6 +27,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.lang.Integer;
 import java.lang.Double;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /**
  * FXML Controller class
@@ -137,19 +139,23 @@ public class ModifyPartController implements Initializable {
     private void ModifyPartSave(MouseEvent event) {
         if(ModifyInhousePartRadio.isSelected()) {
             InhousePart newPart = getNewInhousePartValues();
-            inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
-        
+            if(checkPartValues(newPart)) {
+                inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+                changeToMainScene(event);
+            }
         }
         
         if (ModifyOutsourcedPartRadio.isSelected()) {
             OutsourcedPart newPart = getNewOutsourcedPartValues();
-            inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+            if(checkPartValues(newPart)) {
+               inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+               changeToMainScene(event);
+            }
+            
         }
-        
-        changeToMainScene(event);
     }
     
-      private InhousePart getNewInhousePartValues() {
+     private InhousePart getNewInhousePartValues() {
             int machineId = Integer.parseInt(ModifyPartMachineCompanyTextField.getText());
             int id = modifyPart.getId();
             String name = ModifyPartNameTextField.getText();
@@ -172,10 +178,45 @@ public class ModifyPartController implements Initializable {
             
             return new OutsourcedPart(id, name, price, stock, min, max, companyName);
     }
+       
+    private boolean checkPartValues(Part newPart) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        if (newPart.getStock() <= 0) {
+            alert.setHeaderText("Inventory Level Error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", newPart.getStock()));
+            alert.show();
+            return false;
+        } else if (newPart.getStock() < newPart.getMin()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then minimum ammount: %d", newPart.getStock(), newPart.getMin()));
+            alert.show();
+            return false;
+        } else if (newPart.getStock() > newPart.getMax()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be greater then maximum ammount: %d", newPart.getStock(), newPart.getMax()));
+            alert.show();
+            return false;
+        } else if (newPart.getName().isEmpty()) {
+            alert.setHeaderText("Invalid Data Entry");
+            alert.setContentText(String.format("Part name %s cannot be empty", newPart.getName()));
+            alert.show();
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     @FXML
     private void ModifyPartCancel(MouseEvent event) {
-        changeToMainScene(event);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Cancel Modifying Part");
+        alert.setContentText("Are you sure you wish to cancel?");
+        
+        alert.showAndWait()
+                .filter( response -> response == ButtonType.OK)
+                .ifPresent(response -> changeToMainScene(event));
+
     }
     
     private void changeToMainScene(MouseEvent event) {

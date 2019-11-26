@@ -18,7 +18,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -144,11 +146,18 @@ public class ModifyProductController implements Initializable {
 
    @FXML
     private void deletePartFromAssociatedList(MouseEvent event) {
-        Part selectedPart = associatedPartTable.getSelectionModel().getSelectedItem();
-        ObservableList currentParts = associatedPartTable.getItems();
-        currentParts.remove(currentParts.indexOf(selectedPart));
-        associatedPartTable.setItems(currentParts);
-        associatedPartTable.refresh();
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+       alert.setHeaderText("Delete Part");
+       alert.setContentText("Are you sure you want to delete this part?");
+       alert.showAndWait()
+               .filter(response -> response == ButtonType.OK)
+               .ifPresent((ButtonType response) -> {
+                   Part selectedPart = associatedPartTable.getSelectionModel().getSelectedItem();
+                   ObservableList currentParts = associatedPartTable.getItems();
+                   currentParts.remove(currentParts.indexOf(selectedPart));
+                   associatedPartTable.setItems(currentParts);
+                   associatedPartTable.refresh();
+               });
     }
 
     @FXML
@@ -193,7 +202,13 @@ public class ModifyProductController implements Initializable {
     
     @FXML
     private void cancelModifyProduct(MouseEvent event) {
-        changeToMainScene(event);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText("Cancel Modifying Product");
+        alert.setContentText("Are you sure you wish to cancel?");
+        if (alert.resultProperty().get() == ButtonType.OK) {
+            changeToMainScene(event);
+        }
+
     }
     
 }

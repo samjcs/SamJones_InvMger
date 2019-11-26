@@ -7,75 +7,79 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="435.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/2.2" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="435.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="14.0" layoutY="25.0" text="Add Product" />
-      <TextField fx:id="idField" disable="true" layoutX="147.0" layoutY="67.0" promptText="Auto Gen - Disabled" />
-      <TextField fx:id="nameField" layoutX="147.0" layoutY="101.0" promptText="Part Name" />
+      <Label layoutX="14.0" layoutY="25.0" text="Modify Product" textFill="#3675c7">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <TextField fx:id="idField" layoutX="147.0" layoutY="67.0" promptText="Product ID" />
+      <TextField fx:id="nameField" layoutX="147.0" layoutY="101.0" promptText="Product Name" />
       <TextField fx:id="stockField" layoutX="147.0" layoutY="141.0" promptText="Inv" />
       <TextField fx:id="priceField" layoutX="147.0" layoutY="181.0" promptText="Price/Cost" />
       <TextField fx:id="stockMaxField" layoutX="146.0" layoutY="226.0" prefHeight="26.0" prefWidth="149.0" promptText="Max" />
-      <TextField fx:id="stockMinField" layoutX="341.0" layoutY="226.0" prefHeight="26.0" prefWidth="114.0" promptText="Min" />
-      <Label layoutX="54.0" layoutY="71.0" text="ID" />
-      <Label layoutX="52.0" layoutY="105.0" text="Name" />
-      <Label layoutX="52.0" layoutY="145.0" text="Inv" />
-      <Label layoutX="50.0" layoutY="185.0" text="Price/Cost" />
-      <Label layoutX="55.0" layoutY="231.0" text="Max" />
-      <Label layoutX="311.0" layoutY="231.0" text="Min" />
-      <Button fx:id="saveButton" layoutX="763.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#saveProduct" text="Save" />
-      <Button fx:id="cancelButton" layoutX="822.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#cancelModifyProduct" text="Cancel" />
-      <Button fx:id="partButtonSearch" layoutX="498.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#searchPartInventory" text="Search" />
-      <TextField fx:id="partSearchField" layoutX="562.0" layoutY="43.0" prefHeight="18.0" prefWidth="310.0" />
-      <TableView fx:id="partTable" layoutX="467.0" layoutY="81.0" prefHeight="106.0" prefWidth="374.0">
+      <TextField fx:id="stockMinField" layoutX="147.0" layoutY="265.0" prefHeight="26.0" prefWidth="150.0" promptText="Min" />
+      <Label layoutX="122.0" layoutY="72.0" text="ID" />
+      <Label layoutX="104.0" layoutY="105.0" text="Name" />
+      <Label layoutX="120.0" layoutY="145.0" text="Inv" />
+      <Label layoutX="84.0" layoutY="185.0" text="Price/Cost" />
+      <Label layoutX="117.0" layoutY="230.0" text="Max" />
+      <Label layoutX="118.0" layoutY="269.0" text="Min" />
+      <Button fx:id="saveButton" layoutX="797.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#saveProduct" text="Save" />
+      <Button fx:id="cancelButton" layoutX="851.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#cancelModifyProduct" text="Cancel" />
+      <Button fx:id="partButtonSearch" layoutX="467.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#searchPartInventory" text="Search" />
+      <TextField fx:id="partSearchField" layoutX="532.0" layoutY="43.0" prefHeight="26.0" prefWidth="340.0" />
+      <TableView fx:id="partTable" layoutX="467.0" layoutY="81.0" prefHeight="106.0" prefWidth="430.0">
         <columns>
             <TableColumn fx:id="partId" prefWidth="75.0" text="Part ID">
                 <cellValueFactory>
                     <PropertyValueFactory property="id" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="partName" prefWidth="75.0" text="Part Name">
+            <TableColumn fx:id="partName" prefWidth="107.199951171875" text="Part Name">
                 <cellValueFactory>
                     <PropertyValueFactory property="name" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="partInventoryLevel" prefWidth="75.0" text="Inventory Level">
+            <TableColumn fx:id="partInventoryLevel" prefWidth="112.0" text="Inventory Level">
                 <cellValueFactory>
                     <PropertyValueFactory property="stock" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="partPrice" prefWidth="75.0" text="Price/Cost per Unit">
+            <TableColumn fx:id="partPrice" prefWidth="136.0" text="Price/Cost per Unit">
                 <cellValueFactory>
                     <PropertyValueFactory property="price" />
                 </cellValueFactory>
             </TableColumn>
         </columns>
       </TableView>
-      <Button fx:id="deleteAssociatedPart" layoutX="791.0" layoutY="341.0" mnemonicParsing="false" onMouseClicked="#deletePartFromAssociatedList" prefHeight="0.0" prefWidth="54.0" text="Delete" />
-      <TableView fx:id="associatedPartTable" layoutX="467.0" layoutY="226.0" prefHeight="106.0" prefWidth="374.0">
+      <Button fx:id="deleteAssociatedPart" layoutX="845.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#deletePartFromAssociatedList" prefHeight="0.0" prefWidth="54.0" text="Delete" />
+      <TableView fx:id="associatedPartTable" layoutX="467.0" layoutY="226.0" prefHeight="106.0" prefWidth="430.0">
           <columns>
               <TableColumn fx:id="associtedPartId" prefWidth="75.0" text="Part ID">
                   <cellValueFactory>
                       <PropertyValueFactory property="id" />
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn fx:id="associtedPartName" prefWidth="75.0" text="Part Name">
+              <TableColumn fx:id="associtedPartName" prefWidth="112.79998779296875" text="Part Name">
                   <cellValueFactory>
                       <PropertyValueFactory property="name" />
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn fx:id="associtedPartInventoryLevel" prefWidth="75.0" text="Inventory Level">
+              <TableColumn fx:id="associtedPartInventoryLevel" prefWidth="110.39996337890625" text="Inventory Level">
                   <cellValueFactory>
                       <PropertyValueFactory property="stock" />
                   </cellValueFactory>
               </TableColumn>
-              <TableColumn fx:id="associtedPartPrice" prefWidth="75.0" text="Price/Cost per Unit">
+              <TableColumn fx:id="associtedPartPrice" prefWidth="132.0" text="Price/Cost per Unit">
                   <cellValueFactory>
                       <PropertyValueFactory property="price" />
                   </cellValueFactory>
               </TableColumn>
           </columns>
       </TableView>
-      <Button fx:id="addAssociatedPart" layoutX="797.0" layoutY="190.0" mnemonicParsing="false" onMouseClicked="#addPartToAssociatedList" text="Add" />
+      <Button fx:id="addAssociatedPart" layoutX="858.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#addPartToAssociatedList" text="Add" />
    </children>
 </AnchorPane>

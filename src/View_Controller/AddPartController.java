@@ -104,19 +104,21 @@ public class AddPartController implements Initializable {
 
     @FXML
     private void AddPartSave(MouseEvent event) {
-
-        
         if(InhousePartRadio.isSelected()) {
             InhousePart newPart = getNewInhousePartValues();
-            inv.addPart(newPart);
+            if(checkPartValues(newPart)){
+                inv.addPart(newPart);
+                changeToMainScene(event);
+            }
         }
         
         if (OutsourcedPartRadio.isSelected()) {
             OutsourcedPart newPart = getNewOutsourcedPartValues();
-            inv.addPart(newPart);
+            if(checkPartValues(newPart)) {
+                inv.addPart(newPart);
+                changeToMainScene(event);
+            }
         }
-        
-        changeToMainScene(event);
     }
     
     private InhousePart getNewInhousePartValues() {
@@ -143,15 +145,42 @@ public class AddPartController implements Initializable {
             return new OutsourcedPart(id, name, price, stock, min, max, companyName);
     }
     
-    private boolean checkInhousePartValues(InhousePart newPart) {
-      
-
-        return true;
+    private boolean checkPartValues(Part newPart) {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        
+        if(newPart.getStock() <= 0) {
+            alert.setHeaderText("Inventory Level Error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", newPart.getStock()));
+            alert.show();
+            return false;
+        } else if(newPart.getStock() < newPart.getMin()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then minimum ammount: %d", newPart.getStock(), newPart.getMin()));
+            alert.show();
+            return false;
+        } else if(newPart.getStock() > newPart.getMax()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be greater then maximum ammount: %d", newPart.getStock(), newPart.getMax()));
+            alert.show();
+            return false;
+        } else if (newPart.getName().isEmpty()) {
+            alert.setHeaderText("Invalid Data Entry");
+            alert.setContentText(String.format("Part name %s cannot be empty", newPart.getName()));
+            alert.show();
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @FXML
     private void AddPartCancel(MouseEvent event) {
-        changeToMainScene(event);
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("Cancel Adding New Part");
+        alert.setContentText("Are you sure you wish to cancel?");
+        alert.showAndWait().filter( response -> response == ButtonType.OK).ifPresent(response -> changeToMainScene(event));
+
+        
     }
     
     private void changeToMainScene(MouseEvent event) {

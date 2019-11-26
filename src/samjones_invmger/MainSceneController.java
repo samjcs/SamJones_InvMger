@@ -29,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType; 
 import javafx.scene.control.Alert; 
+import javafx.scene.control.ButtonType;
 
 /**
  * FXML Controller class
@@ -159,7 +160,6 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void ModifyPart(MouseEvent event) throws IOException {
-        
         if(PartTable.getSelectionModel().getSelectedItem()!= null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyPart.fxml"));
@@ -175,16 +175,23 @@ public class MainSceneController implements Initializable {
             }   
         } else {
             Alert warning = new Alert(AlertType.WARNING);
-            warning.setContentText("Part must be Selected");
-            warning.setHeaderText("Modify Part: No Part Selected");
+            warning.setContentText("No Part Selected");
+            warning.setHeaderText("Please select part to modify");
             warning.show();
         }
     }
 
     @FXML
     private void DeletePart(MouseEvent event) {
-        inv.getAllParts().remove(inv.getAllParts().indexOf(PartTable.getSelectionModel().getSelectedItem()));
-        genPartTable();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("Delete Part");
+        alert.setContentText("Are you sure you want to delete this part?");
+        alert.showAndWait()
+                .filter( response -> response == ButtonType.OK)
+                .ifPresent((ButtonType response) -> {
+                    inv.getAllParts().remove(inv.getAllParts().indexOf(PartTable.getSelectionModel().getSelectedItem()));
+                    genPartTable();
+                });
     }
 
     @FXML
@@ -247,8 +254,8 @@ public class MainSceneController implements Initializable {
             }
         } else {
             Alert warning = new Alert(AlertType.WARNING);
-            warning.setContentText("Product must be Selected");
-            warning.setHeaderText("Modify Product: No Product Selected");
+            warning.setContentText("No Product Selected");
+            warning.setHeaderText("Please select product to modify");
             warning.show();
         }
     }
@@ -256,8 +263,15 @@ public class MainSceneController implements Initializable {
   
     @FXML
     private void DeleteProduct(MouseEvent event) {
-        inv.getAllProducts().remove(inv.getAllProducts().indexOf(ProductTable.getSelectionModel().getSelectedItem()));
-        genProductTable();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("Delete Product");
+        alert.setContentText("Are you sure you want to delete this product?");
+        alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent((ButtonType response) -> {
+                    inv.getAllProducts().remove(inv.getAllProducts().indexOf(ProductTable.getSelectionModel().getSelectedItem()));
+                    genProductTable();
+                });
     }
 
     @FXML
