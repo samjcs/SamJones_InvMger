@@ -21,7 +21,7 @@
                </font>
             </Label>
             <Button fx:id="SearchPartButton" layoutX="119.0" layoutY="11.0" mnemonicParsing="false" onMouseClicked="#SearchPart" text="Search" />
-            <TextField fx:id="PartSearchText" layoutX="195.0" layoutY="11.0" onAction="#PartSearch" prefHeight="0.0" prefWidth="134.0" />
+            <TextField fx:id="partSearchField" layoutX="195.0" layoutY="11.0" prefHeight="0.0" prefWidth="134.0" />
             <Button fx:id="AddPartButton" layoutX="76.0" layoutY="283.0" mnemonicParsing="false" onMouseClicked="#AddPart" text="Add" textAlignment="CENTER" />
             <Button fx:id="ModifyPartButton" layoutX="142.0" layoutY="283.0" mnemonicParsing="false" onMouseClicked="#ModifyPart" text="Modify" textAlignment="CENTER" />
             <Button fx:id="DeletePartButton" layoutX="215.0" layoutY="283.0" mnemonicParsing="false" onMouseClicked="#DeletePart" text="Delete" textAlignment="CENTER" />
@@ -58,11 +58,11 @@
          <children>
             <Label layoutX="14.0" layoutY="14.0" text="Products" />
             <Button fx:id="SearchProductButton" layoutX="123.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#SearchProduct" text="Search" />
-            <TextField fx:id="ProductSearchText" layoutX="187.0" layoutY="10.0" onAction="#ProductSearch" />
+            <TextField fx:id="productSearchField" layoutX="187.0" layoutY="10.0" />
             <Button fx:id="AddProductButton" layoutX="83.0" layoutY="288.0" mnemonicParsing="false" onMouseClicked="#AddProduct" text="Add" />
             <Button fx:id="ModifyProductButton" layoutX="147.0" layoutY="288.0" mnemonicParsing="false" onMouseClicked="#ModifyProduct" text="Modify" />
             <Button fx:id="DeleteProductButton" layoutX="222.0" layoutY="288.0" mnemonicParsing="false" onMouseClicked="#DeleteProduct" text="Delete" />
-            <TableView fx:id="ProductTable" layoutX="14.0" layoutY="42.0" onSort="#ProductTableHandler" prefHeight="230.0" prefWidth="328.0">
+            <TableView fx:id="ProductTable" layoutX="14.0" layoutY="42.0" prefHeight="230.0" prefWidth="328.0">
               <columns>
                   <TableColumn fx:id="productId" prefWidth="75.0" text="Product ID" >
                     <cellValueFactory>
@@ -88,6 +88,6 @@
             </TableView>
          </children>
       </AnchorPane>
-      <Button fx:id="ExitButton" layoutX="643.0" layoutY="446.0" mnemonicParsing="false" onMouseClicked="#ExitScene" text="Button" />
+      <Button fx:id="ExitButton" layoutX="643.0" layoutY="446.0" mnemonicParsing="false" onMouseClicked="#ExitScene" text="Exit" />
    </children>
 </AnchorPane>

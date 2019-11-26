@@ -104,29 +104,24 @@ public class AddPartController implements Initializable {
 
     @FXML
     private void AddPartSave(MouseEvent event) {
-        int lastId = 0;
-        for(Part part : inv.getAllParts()) {
-            if(part.getId() > lastId) {
-                lastId = part.getId();
-            }
-        }
+
         
         if(InhousePartRadio.isSelected()) {
-            InhousePart newPart = getNewInhousePartValues(lastId);
+            InhousePart newPart = getNewInhousePartValues();
             inv.addPart(newPart);
         }
         
         if (OutsourcedPartRadio.isSelected()) {
-            OutsourcedPart newPart = getNewOutsourcedPartValues(lastId);
+            OutsourcedPart newPart = getNewOutsourcedPartValues();
             inv.addPart(newPart);
         }
         
         changeToMainScene(event);
     }
     
-    private InhousePart getNewInhousePartValues(int lastId) {
+    private InhousePart getNewInhousePartValues() {
             int machineId = Integer.parseInt(AddPartMachineCompanyTextField.getText());
-            int id = lastId + 1;
+            int id = inv.getNextPartId();
             String name = AddPartNameTextField.getText();
             double price = Double.parseDouble(AddPartPriceTextField.getText());
             int stock = Integer.parseInt(AddPartInvTextField.getText());
@@ -136,9 +131,9 @@ public class AddPartController implements Initializable {
             return new InhousePart(id, name, price, stock, min, max, machineId);
     }
     
-       private OutsourcedPart getNewOutsourcedPartValues(int lastId) {
+       private OutsourcedPart getNewOutsourcedPartValues() {
             String companyName = AddPartMachineCompanyTextField.getText();
-            int id = lastId + 1;
+            int id = inv.getNextPartId();
             String name = AddPartNameTextField.getText();
             double price = Double.parseDouble(AddPartPriceTextField.getText());
             int stock = Integer.parseInt(AddPartInvTextField.getText());

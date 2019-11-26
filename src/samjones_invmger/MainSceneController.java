@@ -40,7 +40,7 @@ public class MainSceneController implements Initializable {
     Inventory inv;
     
     ObservableList<Part> partInventory;
-    ObservableList<Part> partInventorySearch;
+    ObservableList<Part> partSearchResults;
     ObservableList<Product> productInventory;
     ObservableList<Product> productInventorySearch;
     
@@ -48,7 +48,7 @@ public class MainSceneController implements Initializable {
     @FXML
     private Button SearchPartButton;
     @FXML
-    private TextField PartSearchText;
+    private TextField partSearchField;
     @FXML
     private Button AddPartButton;
     @FXML
@@ -68,7 +68,7 @@ public class MainSceneController implements Initializable {
     @FXML
     private Button SearchProductButton;
     @FXML
-    private TextField ProductSearchText;
+    private TextField productSearchField;
     @FXML
     private Button AddProductButton;
     @FXML
@@ -78,20 +78,20 @@ public class MainSceneController implements Initializable {
     @FXML
     private TableView<Product> ProductTable;
     @FXML
-    private TableColumn<?, ?> productId;
+    private TableColumn<Product, ?> productId;
     @FXML
-    private TableColumn<?, ?> productName;
+    private TableColumn<Product, ?> productName;
     @FXML
-    private TableColumn<?, ?> productInventoryLevel;
+    private TableColumn<Product, ?> productInventoryLevel;
     @FXML
-    private TableColumn<?, ?> productPrice;
+    private TableColumn<Product, ?> productPrice;
     @FXML
     private Button ExitButton;
 
        public MainSceneController(Inventory inv) {
         this.partInventory = FXCollections.observableArrayList();
         this.productInventory = FXCollections.observableArrayList();
-        this.partInventorySearch = FXCollections.observableArrayList();
+        this.partSearchResults = FXCollections.observableArrayList();
         this.productInventorySearch = FXCollections.observableArrayList();
         
         this.inv = inv;
@@ -119,10 +119,26 @@ public class MainSceneController implements Initializable {
     
     @FXML
     private void SearchPart(MouseEvent event) {
-    }
+        partSearchResults.clear();
+        String searchQuery = partSearchField.getText();
+        
+        if(searchQuery.isEmpty()) {
+            genPartTable();
+        } else {
+            try {
+                int partId = Integer.parseInt(searchQuery);
+                Part foundPart = inv.lookupPart(partId);
 
-    @FXML
-    private void PartSearch(ActionEvent event) {
+                partSearchResults.add(foundPart);
+                PartTable.setItems(partSearchResults);
+                PartTable.refresh();
+
+            } catch (NumberFormatException e) {
+                partSearchResults.setAll(inv.lookupPart(searchQuery));
+                PartTable.setItems(partSearchResults);
+                PartTable.refresh();
+            }   
+        }
     }
 
     @FXML
@@ -172,16 +188,30 @@ public class MainSceneController implements Initializable {
     }
 
     @FXML
-    private void PartTableHandler() {
-    }
-
-    @FXML
     private void SearchProduct(MouseEvent event) {
-    }
+        productInventorySearch.clear();
+        String searchQuery = productSearchField.getText().trim();
 
-    @FXML
-    private void ProductSearch(ActionEvent event) {
+        if (searchQuery.isEmpty()) {
+            genPartTable();
+        } else {
+            try {
+                int productId = Integer.parseInt(searchQuery);
+                Product foundProduct = inv.lookupProduct(productId);
+
+                productInventorySearch.add(foundProduct);
+                ProductTable.setItems(productInventorySearch);
+                ProductTable.refresh();
+
+            } catch (NumberFormatException e) {
+                productInventorySearch.setAll(inv.lookupProduct(searchQuery));
+                ProductTable.setItems(productInventorySearch);
+                ProductTable.refresh();
+            }
+        }
+    
     }
+    
 
     @FXML
     private void AddProduct(MouseEvent event) throws IOException {       
@@ -201,33 +231,38 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void ModifyProduct(MouseEvent event) throws IOException {
-         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyProduct.fxml"));
-            View_Controller.ModifyProductController controller = new View_Controller.ModifyProductController(inv, ProductTable.getSelectionModel().getSelectedItem());
-            loader.setController(controller);
-            Scene scene; 
-            scene = new Scene(loader.load());
-            Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        
+        if (ProductTable.getSelectionModel().getSelectedItem() != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/View_Controller/ModifyProduct.fxml"));
+                View_Controller.ModifyProductController controller = new View_Controller.ModifyProductController(inv, ProductTable.getSelectionModel().getSelectedItem());
+                loader.setController(controller);
+                Scene scene = new Scene(loader.load());
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Alert warning = new Alert(AlertType.WARNING);
+            warning.setContentText("Product must be Selected");
+            warning.setHeaderText("Modify Product: No Product Selected");
+            warning.show();
+        }
     }
         
   
-
     @FXML
     private void DeleteProduct(MouseEvent event) {
-    }
-
-    @FXML
-    private void ProductTableHandler() {
+        inv.getAllProducts().remove(inv.getAllProducts().indexOf(ProductTable.getSelectionModel().getSelectedItem()));
+        genProductTable();
     }
 
     @FXML
     private void ExitScene(MouseEvent event) {
-        
+        Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

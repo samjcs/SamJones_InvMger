@@ -21,7 +21,7 @@ public class Product {
     int max;
     
     public Product(int id, String name, double price, int stock, int min, int max) {
-        associatedParts = FXCollections.observableArrayList();
+        associatedParts  = FXCollections.observableArrayList();
         setId(id);
         setName(name);
         setPrice(price);

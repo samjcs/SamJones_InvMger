@@ -39,11 +39,11 @@ public class Inventory {
         return foundPart;
     }
     
-    public ObservableList<Part> lookupPart(String partName) {
+    public ObservableList<Part> lookupPart(String searchQuery) {
          ObservableList<Part> foundParts = FXCollections.observableArrayList();
          
          for(Part part : allParts) {
-             if(part.getName().equals(partName)) {
+             if(part.getName().contains(searchQuery)) {
                  foundParts.add(part);
              }
          }
@@ -74,10 +74,10 @@ public class Inventory {
         return foundProduct;
     }
     
-     public ObservableList<Product> lookupProduct(String productName) {
-         ObservableList<Product> foundProducts = FXCollections.observableArrayList();
+     public ObservableList<Product> lookupProduct(String searchQuery) {
+        ObservableList<Product> foundProducts = FXCollections.observableArrayList();
         for(Product product : allProducts) {
-            if(product.getName().equals(productName)) {
+            if(product.getName().contains(searchQuery)) {
                 foundProducts.add(product);
             }
         }
@@ -95,6 +95,28 @@ public class Inventory {
     
     public ObservableList<Product> getAllProducts() {
          return this.allProducts;
+    }
+    
+    public int getNextProductId() {
+        int nextId = 0;
+        for (Product product : this.getAllProducts()) {
+            if (product.getId() > nextId) {
+                nextId = product.getId();
+            }
+        }
+        
+        return nextId;
+    }
+    
+    public int getNextPartId() {
+        int nextId = 0;
+        for (Part part : this.getAllParts()) {
+            if (part.getId() > nextId) {
+                nextId = part.getId();
+            }
+        }
+        
+        return nextId;
     }
      
 }
