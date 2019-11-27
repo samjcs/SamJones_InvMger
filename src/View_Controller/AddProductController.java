@@ -96,8 +96,10 @@ public class AddProductController implements Initializable {
     @FXML
     private void saveProduct(MouseEvent event) {
         Product newProduct = getProductValues();
-        inv.addProduct(newProduct);
-        changeToMainScene(event);
+        if(checkProductValues(newProduct)) {
+            inv.addProduct(newProduct);
+            changeToMainScene(event);
+        }
     }
 
     private Product getProductValues() {
@@ -117,16 +119,66 @@ public class AddProductController implements Initializable {
         return newProduct;
     }
     
-    @FXML
-    private void cancelAddProduct(MouseEvent event) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText("Cancel Adding New Product");
-        alert.setContentText("Are you sure you wish to cancel?");
-        if (alert.resultProperty().get() == ButtonType.OK) {
-            changeToMainScene(event);
+    private boolean checkProductValues(Product newProduct) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        if (newProduct.getStock() <= 0) {
+            alert.setHeaderText("Inventory Level Error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", newProduct.getStock()));
+            alert.show();
+            return false;
+        } else if (newProduct.getStock() < newProduct.getMin()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then minimum ammount: %d", newProduct.getStock(), newProduct.getMin()));
+            alert.show();
+            return false;
+        } else if (newProduct.getStock() > newProduct.getMax()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be greater then maximum ammount: %d", newProduct.getStock(), newProduct.getMax()));
+            alert.show();
+            return false;
+        } else if (newProduct.getName().isEmpty()) {
+            alert.setHeaderText("Invalid Data Entry");
+            alert.setContentText(String.format("Product name %s cannot be empty", newProduct.getName()));
+            alert.show();
+            return false;
+        } else if (newProduct.getAllAssociatedParts().size() < 1) {
+            alert.setHeaderText("Missing Associated Parts");
+            alert.setContentText("Product must contain at least one part");
+            alert.show();
+            return false;
+        } else if (newProduct.getPrice() >= 0.00 && newProduct.getAllAssociatedParts().size() >= 1) {
+            double totalPriceOfParts = 0.00;
+            for(Part part : newProduct.getAllAssociatedParts()) {
+                totalPriceOfParts += part.getPrice();
+            }
+            
+            if(newProduct.getPrice() < totalPriceOfParts) {
+                alert.setHeaderText("Invalid Prodcut Price");
+                alert.setContentText(String.format("Product Price cannot be less then total price of associated parts"));
+                alert.show();
+                return false;
+            } else { 
+                return true;
+            }
+            
+        } else {
+            return true;
         }
     }
-
+    
+    @FXML
+    private void cancelAddProduct(MouseEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Cancel Adding New Product");
+        alert.setContentText("Are you sure you wish to cancel");
+        alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent((ButtonType response) -> {
+                    changeToMainScene(event);
+                });   
+    }
+    
     @FXML
     private void searchPartInventory(MouseEvent event) {
         partSearchResults.clear();

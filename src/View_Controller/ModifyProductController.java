@@ -111,15 +111,9 @@ public class ModifyProductController implements Initializable {
     
     @FXML
     private void saveProduct(MouseEvent event) {
-        int lastId = 0;
-        for (Product product : inv.getAllProducts()) {
-            if (product.getId() > lastId) {
-                lastId = product.getId();
-            }
-        }
-
-        Product newProduct = getProductValues();
-        inv.addProduct(newProduct);
+        Product updatedProduct = getProductValues();
+        if(checkProductValues(updatedProduct))
+        inv.addProduct(updatedProduct);
         changeToMainScene(event);
     }
 
@@ -131,13 +125,61 @@ public class ModifyProductController implements Initializable {
         int min = Integer.parseInt(stockMinField.getText());
         int max = Integer.parseInt(stockMaxField.getText());
 
-        Product newProduct = new Product(id, name, price, stock, min, max);
+        Product updatedProduct = new Product(id, name, price, stock, min, max);
 
         for (Part part : associatedPartTable.getItems()) {
-            newProduct.addAssociatedPart(part);
+            updatedProduct.addAssociatedPart(part);
         }
 
-        return newProduct;
+        return updatedProduct;
+    }
+    
+    private boolean checkProductValues(Product updatedProduct) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        if (updatedProduct.getStock() <= 0) {
+            alert.setHeaderText("Inventory Level Error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", updatedProduct.getStock()));
+            alert.show();
+            return false;
+        } else if (updatedProduct.getStock() < updatedProduct.getMin()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then minimum ammount: %d", updatedProduct.getStock(), updatedProduct.getMin()));
+            alert.show();
+            return false;
+        } else if (updatedProduct.getStock() > updatedProduct.getMax()) {
+            alert.setHeaderText("Inventory level error");
+            alert.setContentText(String.format("Stock Level: %d Cannont be greater then maximum ammount: %d", updatedProduct.getStock(), updatedProduct.getMax()));
+            alert.show();
+            return false;
+        } else if (updatedProduct.getName().isEmpty()) {
+            alert.setHeaderText("Invalid Data Entry");
+            alert.setContentText(String.format("Product name %s cannot be empty", updatedProduct.getName()));
+            alert.show();
+            return false;
+        } else if (updatedProduct.getAllAssociatedParts().size() < 1) {
+            alert.setHeaderText("Missing Associated Parts");
+            alert.setContentText("Product must contain at least one part");
+            alert.show();
+            return false;
+        } else if (updatedProduct.getPrice() >= 0.00 && updatedProduct.getAllAssociatedParts().size() >= 1) {
+            double totalPriceOfParts = 0.00;
+            for (Part part : updatedProduct.getAllAssociatedParts()) {
+                totalPriceOfParts += part.getPrice();
+            }
+
+            if (updatedProduct.getPrice() < totalPriceOfParts) {
+                alert.setHeaderText("Invalid Prodcut Price");
+                alert.setContentText(String.format("Product Price cannot be less then total price of associated parts"));
+                alert.show();
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
     }
 
     @FXML
@@ -205,9 +247,11 @@ public class ModifyProductController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("Cancel Modifying Product");
         alert.setContentText("Are you sure you wish to cancel?");
-        if (alert.resultProperty().get() == ButtonType.OK) {
-            changeToMainScene(event);
-        }
+        alert.showAndWait()
+               .filter(response -> response == ButtonType.OK)
+               .ifPresent((ButtonType response) -> {
+                   changeToMainScene(event);
+               });
 
     }
     

@@ -178,9 +178,9 @@ public class AddPartController implements Initializable {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setHeaderText("Cancel Adding New Part");
         alert.setContentText("Are you sure you wish to cancel?");
-        alert.showAndWait().filter( response -> response == ButtonType.OK).ifPresent(response -> changeToMainScene(event));
-
-        
+        alert.showAndWait()
+                .filter( response -> response == ButtonType.OK)
+                .ifPresent(response -> changeToMainScene(event));     
     }
     
     private void changeToMainScene(MouseEvent event) {
