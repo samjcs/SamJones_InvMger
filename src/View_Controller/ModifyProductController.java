@@ -118,6 +118,7 @@ public class ModifyProductController implements Initializable {
     }
 
     private Product getProductValues() {
+        try {
         int id = Integer.parseInt(idField.getText());
         String name = nameField.getText();
         double price = Double.parseDouble(priceField.getText());
@@ -132,14 +133,26 @@ public class ModifyProductController implements Initializable {
         }
 
         return updatedProduct;
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Invalid Data Product Data");
+            alert.setContentText(String.format("All firelds are required and need to be in the following format: \n\n"
+                    + "Name: Text \n"
+                    + "Price: Decimal Number \n"
+                    + "Stock: Whole Number \n"
+                    + "Max: Whole Number \n"
+                    + "Min: Whole Number \n"));
+            alert.show();
+            return null;
+        }
     }
     
     private boolean checkProductValues(Product updatedProduct) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
 
-        if (updatedProduct.getStock() <= 0) {
+        if (updatedProduct.getStock() <= 1) {
             alert.setHeaderText("Inventory Level Error");
-            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", updatedProduct.getStock()));
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 1", updatedProduct.getStock()));
             alert.show();
             return false;
         } else if (updatedProduct.getStock() < updatedProduct.getMin()) {

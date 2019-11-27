@@ -37,118 +37,117 @@ import javafx.scene.control.ButtonType;
  */
 public class ModifyPartController implements Initializable {
     Inventory inv;
-    Part modifyPart;
+    Part partToUpdate;
     InhousePart inhousePart;
     OutsourcedPart outsourcePart;
     
     @FXML
-    private RadioButton ModifyInhousePartRadio;
+    private RadioButton inhousePartRadio;
 
     @FXML
-    private RadioButton ModifyOutsourcedPartRadio;
+    private RadioButton outsourcedPartRadio;
 
     @FXML
-    private TextField ModifyPartIDTextField;
+    private TextField idField;
 
     @FXML
-    private TextField ModifyPartNameTextField;
+    private TextField nameField;
 
     @FXML
-    private TextField ModifyPartInvTextField;
+    private TextField stockField;
 
     @FXML
-    private TextField ModifyPartPriceTextField;
+    private TextField priceField;
 
     @FXML
-    private TextField ModifyPartInvMaxTextField;
+    private TextField stockMaxField;
 
     @FXML
-    private TextField ModifyPartInvMinTextField;
+    private TextField stockMinField;
 
     @FXML
-    private TextField ModifyPartMachineCompanyTextField;
+    private TextField machineIdAndCompanyField;
 
     @FXML
-    private Label MachineCompanyLabel;
+    private Label machineIdAndCompanyLabel;
 
     @FXML
-    private Button ModifyPartSaveButton;
+    private Button updatePartButton;
 
     @FXML
-    private Button ModifyPartCancelButton;
+    private Button cancelUpdatePartButton;
 
-    public ModifyPartController(Inventory inv, Part modifyPart) {
+    public ModifyPartController(Inventory inv, Part partToUpdate) {
         this.inv = inv;
-        this.modifyPart = modifyPart;
+        this.partToUpdate = partToUpdate;
     }
     
-    private void populatePartData() {
-        ModifyPartIDTextField.setText(Integer.toString(modifyPart.getId()));
-        ModifyPartNameTextField.setText(modifyPart.getName());
-        ModifyPartInvTextField.setText(Integer.toString(modifyPart.getStock()));
-        ModifyPartPriceTextField.setText(Double.toString(modifyPart.getPrice()));
-        ModifyPartInvMaxTextField.setText(Integer.toString(modifyPart.getMax()));
-        ModifyPartInvMinTextField.setText(Integer.toString(modifyPart.getMin()));
-        
-        if(inhousePart != null) {
-            ModifyPartMachineCompanyTextField.setText(Integer.toString(inhousePart.getMachineId()));
-        } else {
-            ModifyPartMachineCompanyTextField.setText(outsourcePart.getCompanyName());
-        }
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ToggleGroup radioGroup = new ToggleGroup();
-        ModifyInhousePartRadio.setToggleGroup(radioGroup);
-        ModifyOutsourcedPartRadio.setToggleGroup(radioGroup);
+        inhousePartRadio.setToggleGroup(radioGroup);
+        outsourcedPartRadio.setToggleGroup(radioGroup);
             
-        if(modifyPart instanceof InhousePart) {
-            this.inhousePart = (InhousePart) modifyPart;
+        if(partToUpdate instanceof InhousePart) {
+            this.inhousePart = (InhousePart) partToUpdate;
             this.outsourcePart = null;
-            ModifyInhousePartRadio.setSelected(true);
-            ModifyOutsourcedPartRadio.setSelected(false);
+            inhousePartRadio.setSelected(true);
  
         } else {
-            this.outsourcePart = (OutsourcedPart) modifyPart;
+            this.outsourcePart = (OutsourcedPart) partToUpdate;
             this.inhousePart = null;
-            ModifyOutsourcedPartRadio.setSelected(true);
-            ModifyInhousePartRadio.setSelected(false);
+            outsourcedPartRadio.setSelected(true);
         }
         
         populatePartData();
-        
+    }
+
+    private void populatePartData() {
+        idField.setText(Integer.toString(partToUpdate.getId()));
+        nameField.setText(partToUpdate.getName());
+        stockField.setText(Integer.toString(partToUpdate.getStock()));
+        priceField.setText(Double.toString(partToUpdate.getPrice()));
+        stockMaxField.setText(Integer.toString(partToUpdate.getMax()));
+        stockMinField.setText(Integer.toString(partToUpdate.getMin()));
+
+        if (inhousePart != null) {
+            machineIdAndCompanyField.setText(Integer.toString(inhousePart.getMachineId()));
+        } else {
+            machineIdAndCompanyField.setText(outsourcePart.getCompanyName());
+        }
     }    
 
 
     @FXML
-    private void ModifyInhousePart(MouseEvent event) {
-        if(ModifyInhousePartRadio.isSelected()) {
-            ModifyPartMachineCompanyTextField.setText("Machine");
+    private void toggleInhousePart(MouseEvent event) {
+        if(inhousePartRadio.isSelected()) {
+            machineIdAndCompanyField.setText("Machine ID");
+            machineIdAndCompanyLabel.setText("Machine");
         }
     }
 
     @FXML
-    private void ModifyOutsourcedPart(MouseEvent event) {
-         if(ModifyOutsourcedPartRadio.isSelected()) {
-            ModifyPartMachineCompanyTextField.setText("Company");
+    private void toggleOutsourcedPart(MouseEvent event) {
+         if(outsourcedPartRadio.isSelected()) {
+            machineIdAndCompanyField.setText("Company Name");
+            machineIdAndCompanyLabel.setText("Company");
         }
     }
 
     @FXML
-    private void ModifyPartSave(MouseEvent event) {
-        if(ModifyInhousePartRadio.isSelected()) {
+    private void updatePart(MouseEvent event) {
+        if(inhousePartRadio.isSelected()) {
             InhousePart newPart = getNewInhousePartValues();
-            if(checkPartValues(newPart)) {
-                inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+            if(newPart != null && checkPartValues(newPart)) {
+                inv.getAllParts().set(inv.getAllParts().indexOf(partToUpdate), newPart);
                 changeToMainScene(event);
             }
         }
         
-        if (ModifyOutsourcedPartRadio.isSelected()) {
+        if (outsourcedPartRadio.isSelected()) {
             OutsourcedPart newPart = getNewOutsourcedPartValues();
-            if(checkPartValues(newPart)) {
-               inv.getAllParts().set(inv.getAllParts().indexOf(modifyPart), newPart);
+            if(newPart != null && checkPartValues(newPart)) {
+               inv.getAllParts().set(inv.getAllParts().indexOf(partToUpdate), newPart);
                changeToMainScene(event);
             }
             
@@ -156,35 +155,66 @@ public class ModifyPartController implements Initializable {
     }
     
      private InhousePart getNewInhousePartValues() {
-            int machineId = Integer.parseInt(ModifyPartMachineCompanyTextField.getText());
-            int id = modifyPart.getId();
-            String name = ModifyPartNameTextField.getText();
-            double price = Double.parseDouble(ModifyPartPriceTextField.getText());
-            int stock = Integer.parseInt(ModifyPartInvTextField.getText());
-            int min = Integer.parseInt(ModifyPartInvMinTextField.getText());
-            int max = Integer.parseInt(ModifyPartInvMaxTextField.getText());
-            
-            return new InhousePart(id, name, price, stock, min, max, machineId);
+            try {
+                int machineId = Integer.parseInt(machineIdAndCompanyField.getText());
+                int id = partToUpdate.getId();
+                String name = nameField.getText();
+                double price = Double.parseDouble(priceField.getText());
+                int stock = Integer.parseInt(stockField.getText());
+                int min = Integer.parseInt(stockMinField.getText());
+                int max = Integer.parseInt(stockMaxField.getText());
+                return new InhousePart(id, name, price, stock, min, max, machineId);
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText("Invalid Data Part Data");
+                alert.setContentText(String.format("All firelds are required and need to be in the following format: \n\n"
+                        + "Name: Text \n"
+                        + "Price: Decimal Number \n"
+                        + "Stock: Whole Number \n"
+                        + "Max: Whole Number \n"
+                        + "Min: Whole Number \n"
+                        + "Machine ID: Whole Number \n"));
+                alert.show();
+                return null;
+            }
     }
     
        private OutsourcedPart getNewOutsourcedPartValues() {
-            String companyName = ModifyPartMachineCompanyTextField.getText();
-            int id = modifyPart.getId();
-            String name = ModifyPartNameTextField.getText();
-            double price = Double.parseDouble(ModifyPartPriceTextField.getText());
-            int stock = Integer.parseInt(ModifyPartInvTextField.getText());
-            int min = Integer.parseInt(ModifyPartInvMinTextField.getText());
-            int max = Integer.parseInt(ModifyPartInvMaxTextField.getText());
-            
-            return new OutsourcedPart(id, name, price, stock, min, max, companyName);
+           try {
+                String companyName = machineIdAndCompanyField.getText();
+                int id = partToUpdate.getId();
+                String name = nameField.getText();
+                double price = Double.parseDouble(priceField.getText());
+                int stock = Integer.parseInt(stockField.getText());
+                int min = Integer.parseInt(stockMinField.getText());
+                int max = Integer.parseInt(stockMaxField.getText());
+                return new OutsourcedPart(id, name, price, stock, min, max, companyName);
+           } catch (NumberFormatException e) {
+               Alert alert = new Alert(Alert.AlertType.WARNING);
+               alert.setHeaderText("Invalid Data Part Data");
+               alert.setContentText(String.format("All firelds are required and need to be in the following format: \n\n"
+                       + "Name: Text \n"
+                       + "Price: Decimal Number \n"
+                       + "Stock: Whole Number \n"
+                       + "Max: Whole Number \n"
+                       + "Min: Whole Number \n"
+                       + "Company Name: Text"));
+               alert.show();
+               return null;
+           }
     }
        
     private boolean checkPartValues(Part newPart) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
 
-        if (newPart.getStock() <= 0) {
+        if (newPart.getStock() < 1) {
             alert.setHeaderText("Inventory Level Error");
-            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", newPart.getStock()));
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 1", newPart.getStock()));
+            alert.show();
+            return false;
+        } else if (newPart.getPrice() < 0) {
+            alert.setHeaderText("Part Price Error");
+            alert.setContentText("Price cannot be less then 0.00");
             alert.show();
             return false;
         } else if (newPart.getStock() < newPart.getMin()) {
@@ -208,7 +238,7 @@ public class ModifyPartController implements Initializable {
     }
 
     @FXML
-    private void ModifyPartCancel(MouseEvent event) {
+    private void cancelUpdatePart(MouseEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Cancel Modifying Part");
         alert.setContentText("Are you sure you wish to cancel?");

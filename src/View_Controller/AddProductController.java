@@ -103,28 +103,41 @@ public class AddProductController implements Initializable {
     }
 
     private Product getProductValues() {
-        int id = inv.getNextProductId();
-        String name = nameField.getText();
-        double price = Double.parseDouble(priceField.getText());
-        int stock = Integer.parseInt(stockField.getText());
-        int min = Integer.parseInt(stockMinField.getText());
-        int max = Integer.parseInt(stockMaxField.getText());
-        
-        Product newProduct = new Product(id, name, price, stock, min, max);
-        
-        for(Part part: associatedPartTable.getItems()) {
-            newProduct.addAssociatedPart(part);
-        }
+        try {
+            int id = inv.getNextProductId();
+            String name = nameField.getText();
+            double price = Double.parseDouble(priceField.getText());
+            int stock = Integer.parseInt(stockField.getText());
+            int min = Integer.parseInt(stockMinField.getText());
+            int max = Integer.parseInt(stockMaxField.getText());
+
+            Product newProduct = new Product(id, name, price, stock, min, max);
+
+            for(Part part: associatedPartTable.getItems()) {
+                newProduct.addAssociatedPart(part);
+            }
      
         return newProduct;
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Invalid Data Product Data");
+            alert.setContentText(String.format("All firelds are required and need to be in the following format: \n\n"
+                    + "Name: Text \n"
+                    + "Price: Decimal Number \n"
+                    + "Stock: Whole Number \n"
+                    + "Max: Whole Number \n"
+                    + "Min: Whole Number \n" ));
+            alert.show();
+            return null;
+        }
     }
     
     private boolean checkProductValues(Product newProduct) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
 
-        if (newProduct.getStock() <= 0) {
+        if (newProduct.getStock() <= 1) {
             alert.setHeaderText("Inventory Level Error");
-            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", newProduct.getStock()));
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 1", newProduct.getStock()));
             alert.show();
             return false;
         } else if (newProduct.getStock() < newProduct.getMin()) {

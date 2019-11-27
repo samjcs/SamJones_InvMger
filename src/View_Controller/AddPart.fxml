@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="14.0" layoutY="25.0" text="Add Part" />
-      <RadioButton fx:id="InhousePartRadio" layoutX="151.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#CheckAddInhousePart" selected="true" text="In-House" />
-      <RadioButton fx:id="OutsourcedPartRadio" layoutX="264.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#CheckAddOutsourcedPart" text="Outsourced" />
-      <TextField fx:id="AddPartIDTextField" disable="true" layoutX="147.0" layoutY="67.0" promptText="Auto Gen - Disabled" />
-      <TextField fx:id="AddPartNameTextField" layoutX="147.0" layoutY="101.0" promptText="Part Name" />
-      <TextField fx:id="AddPartInvTextField" layoutX="147.0" layoutY="141.0" promptText="Inv" />
-      <TextField fx:id="AddPartPriceTextField" layoutX="147.0" layoutY="181.0" promptText="Price/Cost" />
-      <TextField fx:id="AddPartInvMaxTextField" layoutX="146.0" layoutY="226.0" prefHeight="26.0" prefWidth="149.0" promptText="Max" />
-      <TextField fx:id="AddPartInvMinTextField" layoutX="341.0" layoutY="226.0" prefHeight="26.0" prefWidth="114.0" promptText="Min" />
-      <TextField fx:id="AddPartMachineCompanyTextField" layoutX="146.0" layoutY="270.0" prefHeight="26.0" prefWidth="310.0" promptText="Machine ID" />
+      <Label layoutX="14.0" layoutY="25.0" text="Add Part" textFill="#3a74b2">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <RadioButton fx:id="inhousePartRadio" layoutX="151.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#toggleInhousePart" selected="true" text="In-House" />
+      <RadioButton fx:id="outsourcedPartRadio" layoutX="264.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#toggleOutsourcedPart" text="Outsourced" />
+      <TextField fx:id="idField" disable="true" layoutX="147.0" layoutY="67.0" promptText="Auto Gen - Disabled" />
+      <TextField fx:id="nameField" layoutX="147.0" layoutY="101.0" promptText="Part Name" />
+      <TextField fx:id="stockField" layoutX="147.0" layoutY="141.0" promptText="Inv" />
+      <TextField fx:id="priceField" layoutX="147.0" layoutY="181.0" promptText="Price/Cost" />
+      <TextField fx:id="stockMaxField" layoutX="146.0" layoutY="226.0" prefHeight="26.0" prefWidth="149.0" promptText="Max" />
+      <TextField fx:id="stockMinField" layoutX="341.0" layoutY="226.0" prefHeight="26.0" prefWidth="114.0" promptText="Min" />
+      <TextField fx:id="machineIdAndCompanyField" layoutX="146.0" layoutY="270.0" prefHeight="26.0" prefWidth="310.0" promptText="Machine ID" />
       <Label layoutX="54.0" layoutY="71.0" text="ID" />
       <Label layoutX="52.0" layoutY="105.0" text="Name" />
       <Label layoutX="52.0" layoutY="145.0" text="Inv" />
       <Label layoutX="50.0" layoutY="185.0" text="Price/Cost" />
       <Label layoutX="55.0" layoutY="231.0" text="Max" />
       <Label layoutX="311.0" layoutY="231.0" text="Min" />
-      <Label fx:id="AddPartMachineCompanyLabel" layoutX="54.0" layoutY="274.0" text="Machine ID" />
-      <Button fx:id="AddPartSaveButton" layoutX="481.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#AddPartSave" text="Save" />
-      <Button fx:id="AddPartCancelButton" layoutX="534.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#AddPartCancel" text="Cancel" />
+      <Label fx:id="machineIdAndCompanyLabel" layoutX="54.0" layoutY="274.0" text="Machine ID" />
+      <Button fx:id="savePartButton" layoutX="448.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#savePart" text="Save" />
+      <Button fx:id="cancelAddPartButton" layoutX="523.0" layoutY="359.0" mnemonicParsing="false" onMouseClicked="#cancelAddPart" text="Cancel" />
    </children>
+   <padding>
+      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+   </padding>
 </AnchorPane>

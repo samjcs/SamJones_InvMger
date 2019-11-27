@@ -37,128 +37,154 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class AddPartController implements Initializable {
     Inventory inv;
-    ObservableList<Part> partInventory;
-    ObservableList<Part> partInventorySearch;
     
     @FXML
-    private RadioButton InhousePartRadio;
+    private RadioButton inhousePartRadio;
     @FXML
-    private RadioButton OutsourcedPartRadio;
+    private RadioButton outsourcedPartRadio;
     @FXML
-    private TextField AddPartIDTextField;
+    private TextField idField;
     @FXML
-    private TextField AddPartNameTextField;
+    private TextField nameField;
     @FXML
-    private TextField AddPartInvTextField;
+    private TextField stockField;
     @FXML
-    private TextField AddPartPriceTextField;
+    private TextField priceField;
     @FXML
-    private TextField AddPartInvMaxTextField;
+    private TextField stockMaxField;
     @FXML
-    private TextField AddPartInvMinTextField;
+    private TextField stockMinField;
     @FXML
-    private TextField AddPartMachineCompanyTextField;
+    private TextField machineIdAndCompanyField;
     @FXML
-    private Label AddPartMachineCompanyLabel;
+    private Label machineIdAndCompanyLabel;
     @FXML
-    private Button AddPartSaveButton;
+    private Button savePartButton;
     @FXML
-    private Button AddPartCancelButton;
+    private Button cancelAddPartButton;
 
     public AddPartController(Inventory inv) {
         this.inv = inv;
     }
-    
-    
-    /**
-     * Initializes the controller class.
-     */
+  
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Set Toggle Group for radio buttons
         ToggleGroup radioGroup = new ToggleGroup();
-        InhousePartRadio.setToggleGroup(radioGroup);
-        OutsourcedPartRadio.setToggleGroup(radioGroup);
-        InhousePartRadio.setSelected(true);
-        
-        //init inventory
-        partInventory = inv.getAllParts();
+        inhousePartRadio.setToggleGroup(radioGroup);
+        outsourcedPartRadio.setToggleGroup(radioGroup);
+        inhousePartRadio.setSelected(true);
     }    
 
     @FXML
-    private void CheckAddInhousePart(MouseEvent event) {
-        if(InhousePartRadio.isSelected()) {
-            AddPartMachineCompanyLabel.setText("Machine");
-            AddPartMachineCompanyTextField.setText("Machine ID");
+    private void toggleInhousePart(MouseEvent event) {
+        if(inhousePartRadio.isSelected()) {
+            machineIdAndCompanyLabel.setText("Machine");
+            machineIdAndCompanyField.setText("Machine ID");
         }
     }
 
     @FXML
-    private void CheckAddOutsourcedPart(MouseEvent event) {
-        if (OutsourcedPartRadio.isSelected()) {
-            AddPartMachineCompanyLabel.setText("Company");
-            AddPartMachineCompanyTextField.setText("Company Name");
+    private void toggleOutsourcedPart(MouseEvent event) {
+        if (outsourcedPartRadio.isSelected()) {
+            machineIdAndCompanyLabel.setText("Company");
+            machineIdAndCompanyField.setText("Company Name");
         }
         
     }
 
     @FXML
-    private void AddPartSave(MouseEvent event) {
-        if(InhousePartRadio.isSelected()) {
+    private void savePart(MouseEvent event) {
+        if(inhousePartRadio.isSelected()) {
             InhousePart newPart = getNewInhousePartValues();
-            if(checkPartValues(newPart)){
+            if(newPart != null && checkPartValues(newPart)){
                 inv.addPart(newPart);
                 changeToMainScene(event);
             }
         }
         
-        if (OutsourcedPartRadio.isSelected()) {
+        if (outsourcedPartRadio.isSelected()) {
             OutsourcedPart newPart = getNewOutsourcedPartValues();
-            if(checkPartValues(newPart)) {
+            if(newPart != null && checkPartValues(newPart)) {
                 inv.addPart(newPart);
                 changeToMainScene(event);
             }
         }
     }
     
-    private InhousePart getNewInhousePartValues() {
-            int machineId = Integer.parseInt(AddPartMachineCompanyTextField.getText());
+    private InhousePart getNewInhousePartValues() {   
+        try {
             int id = inv.getNextPartId();
-            String name = AddPartNameTextField.getText();
-            double price = Double.parseDouble(AddPartPriceTextField.getText());
-            int stock = Integer.parseInt(AddPartInvTextField.getText());
-            int min = Integer.parseInt(AddPartInvMinTextField.getText());
-            int max = Integer.parseInt(AddPartInvMaxTextField.getText());
+            String name = nameField.getText();
+            int machineId = Integer.parseInt(machineIdAndCompanyField.getText());
+            double price = Double.parseDouble(priceField.getText());
+            int stock = Integer.parseInt(stockField.getText());
+            int min = Integer.parseInt(stockMinField.getText());
+            int max = Integer.parseInt(stockMaxField.getText());
+             return new InhousePart(id, name, price, stock, min, max, machineId);
+        } catch(NumberFormatException e) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setHeaderText("Invalid Data Part Data");
+            alert.setContentText(String.format("All firelds are required and need to be in the following format: \n\n"
+                    + "Name: Text \n"
+                    + "Price: Decimal Number \n"
+                    + "Stock: Whole Number \n"
+                    + "Max: Whole Number \n"
+                    + "Min: Whole Number \n"
+                    + "Machine ID: Whole Number \n"));
+            alert.show();
+
+            return null;
+        }
             
-            return new InhousePart(id, name, price, stock, min, max, machineId);
+           
     }
     
        private OutsourcedPart getNewOutsourcedPartValues() {
-            String companyName = AddPartMachineCompanyTextField.getText();
-            int id = inv.getNextPartId();
-            String name = AddPartNameTextField.getText();
-            double price = Double.parseDouble(AddPartPriceTextField.getText());
-            int stock = Integer.parseInt(AddPartInvTextField.getText());
-            int min = Integer.parseInt(AddPartInvMinTextField.getText());
-            int max = Integer.parseInt(AddPartInvMaxTextField.getText());
-            
-            return new OutsourcedPart(id, name, price, stock, min, max, companyName);
+           try {
+                String companyName = machineIdAndCompanyField.getText();
+                int id = inv.getNextPartId();
+                String name = nameField.getText();
+                double price = Double.parseDouble(priceField.getText());
+                int stock = Integer.parseInt(stockField.getText());
+                int min = Integer.parseInt(stockMinField.getText());
+                int max = Integer.parseInt(stockMaxField.getText());
+                return new OutsourcedPart(id, name, price, stock, min, max, companyName);
+           } catch (NumberFormatException e) {
+               Alert alert = new Alert(AlertType.WARNING);
+               alert.setHeaderText("Invalid Data Part Data");
+               alert.setContentText(String.format("All firelds are required and need to be in the following format: \n\n"
+                       + "Name: Text \n"
+                       + "Price: Decimal Number \n"
+                       + "Stock: Whole Number \n"
+                       + "Max: Whole Number \n"
+                       + "Min: Whole Number \n"
+                       + "Company Name: Text"));
+               alert.show();
+               
+               return null;
+           }
     }
     
     private boolean checkPartValues(Part newPart) {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
+        Alert alert = new Alert(AlertType.WARNING);
         
-        if(newPart.getStock() <= 0) {
+        if (newPart.getStock() < 1) {
             alert.setHeaderText("Inventory Level Error");
-            alert.setContentText(String.format("Stock Level: %d Cannont be less then 0", newPart.getStock()));
+            alert.setContentText(String.format("Stock Level: %d Cannont be less then 1", newPart.getStock()));
             alert.show();
             return false;
-        } else if(newPart.getStock() < newPart.getMin()) {
+        } else if (newPart.getPrice() < 0) {
+            alert.setHeaderText("Part Price Error");
+            alert.setContentText("Price cannot be less then 0.00");
+            alert.show();
+            return false;
+        } else if (newPart.getStock() < newPart.getMin()) {
             alert.setHeaderText("Inventory level error");
             alert.setContentText(String.format("Stock Level: %d Cannont be less then minimum ammount: %d", newPart.getStock(), newPart.getMin()));
             alert.show();
             return false;
-        } else if(newPart.getStock() > newPart.getMax()) {
+        } else if (newPart.getStock() > newPart.getMax()) {
             alert.setHeaderText("Inventory level error");
             alert.setContentText(String.format("Stock Level: %d Cannont be greater then maximum ammount: %d", newPart.getStock(), newPart.getMax()));
             alert.show();
@@ -174,7 +200,7 @@ public class AddPartController implements Initializable {
     }
 
     @FXML
-    private void AddPartCancel(MouseEvent event) {
+    private void cancelAddPart(MouseEvent event) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setHeaderText("Cancel Adding New Part");
         alert.setContentText("Are you sure you wish to cancel?");

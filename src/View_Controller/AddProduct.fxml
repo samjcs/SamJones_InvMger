@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -27,8 +28,8 @@
       <Label layoutX="77.0" layoutY="185.0" text="Price/Cost" />
       <Label layoutX="108.0" layoutY="230.0" text="Max" />
       <Label layoutX="112.0" layoutY="270.0" text="Min" />
-      <Button fx:id="saveButton" layoutX="797.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#saveProduct" text="Save" />
-      <Button fx:id="cancelButton" layoutX="851.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#cancelAddProduct" text="Cancel" />
+      <Button fx:id="saveButton" layoutX="780.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#saveProduct" text="Save" />
+      <Button fx:id="cancelButton" layoutX="839.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#cancelAddProduct" text="Cancel" />
       <Button fx:id="partButtonSearch" layoutX="467.0" layoutY="43.0" mnemonicParsing="false" onMouseClicked="#searchPartInventory" text="Search" />
       <TextField fx:id="partSearchField" layoutX="540.0" layoutY="43.0" prefHeight="26.0" prefWidth="352.0" />
       <TableView fx:id="partTable" layoutX="467.0" layoutY="81.0" prefHeight="106.0" prefWidth="426.0">
@@ -82,4 +83,7 @@
       </TableView>
       <Button fx:id="addAssociatedPart" layoutX="851.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#addPartToAssociatedList" prefWidth="41.0" text="Add" />
    </children>
+   <padding>
+      <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+   </padding>
 </AnchorPane>
