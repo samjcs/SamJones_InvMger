@@ -97,6 +97,8 @@ public class ModifyPartController implements Initializable {
             this.outsourcePart = (OutsourcedPart) partToUpdate;
             this.inhousePart = null;
             outsourcedPartRadio.setSelected(true);
+            machineIdAndCompanyField.setPromptText("Company Name");
+            machineIdAndCompanyLabel.setText("Company");
         }
         
         populatePartData();
@@ -121,7 +123,7 @@ public class ModifyPartController implements Initializable {
     @FXML
     private void toggleInhousePart(MouseEvent event) {
         if(inhousePartRadio.isSelected()) {
-            machineIdAndCompanyField.setText("Machine ID");
+            machineIdAndCompanyField.setPromptText("Machine ID");
             machineIdAndCompanyLabel.setText("Machine");
         }
     }
@@ -129,7 +131,7 @@ public class ModifyPartController implements Initializable {
     @FXML
     private void toggleOutsourcedPart(MouseEvent event) {
          if(outsourcedPartRadio.isSelected()) {
-            machineIdAndCompanyField.setText("Company Name");
+            machineIdAndCompanyField.setPromptText("Company Name");
             machineIdAndCompanyLabel.setText("Company");
         }
     }

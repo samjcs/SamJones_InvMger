@@ -36,6 +36,7 @@ public class ModifyProductController implements Initializable {
     Inventory inv;
     Product selectedProductFromMain;
     ObservableList<Part> loadParts;
+    ObservableList<Part> partSearchResults;
     
     @FXML
     private TextField idField;
@@ -87,6 +88,7 @@ public class ModifyProductController implements Initializable {
         this.inv = inv;
         this.selectedProductFromMain = product;
         this.loadParts = FXCollections.observableArrayList();
+        this.partSearchResults = FXCollections.observableArrayList();
         this.loadParts.setAll(product.getAllAssociatedParts());
         
     }
@@ -112,9 +114,10 @@ public class ModifyProductController implements Initializable {
     @FXML
     private void saveProduct(MouseEvent event) {
         Product updatedProduct = getProductValues();
-        if(checkProductValues(updatedProduct))
-        inv.addProduct(updatedProduct);
-        changeToMainScene(event);
+        if(updatedProduct != null && checkProductValues(updatedProduct)) {
+            inv.updateProduct(inv.getAllProducts().indexOf(this.selectedProductFromMain), updatedProduct);
+            changeToMainScene(event);
+        }
     }
 
     private Product getProductValues() {
@@ -197,6 +200,26 @@ public class ModifyProductController implements Initializable {
 
     @FXML
     private void searchPartInventory(MouseEvent event) {
+        partSearchResults.clear();
+        String searchQuery = partSearchField.getText();
+
+        if (searchQuery.isEmpty()) {
+            genPartTable();
+        } else {
+            try {
+                int partId = Integer.parseInt(searchQuery);
+                Part foundPart = inv.lookupPart(partId);
+
+                partSearchResults.add(foundPart);
+                partTable.setItems(partSearchResults);
+                partTable.refresh();
+
+            } catch (NumberFormatException e) {
+                partSearchResults.setAll(inv.lookupPart(searchQuery));
+                partTable.setItems(partSearchResults);
+                partTable.refresh();
+            }
+        }
     }
 
    @FXML

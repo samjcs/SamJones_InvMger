@@ -96,7 +96,7 @@ public class AddProductController implements Initializable {
     @FXML
     private void saveProduct(MouseEvent event) {
         Product newProduct = getProductValues();
-        if(checkProductValues(newProduct)) {
+        if(newProduct != null && checkProductValues(newProduct)) {
             inv.addProduct(newProduct);
             changeToMainScene(event);
         }

@@ -276,7 +276,15 @@ public class MainSceneController implements Initializable {
 
     @FXML
     private void ExitScene(MouseEvent event) {
-        Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("Exit Program");
+        alert.setContentText("Are you sure you want to exit?");
+        alert.showAndWait()
+                .filter(response -> response == ButtonType.OK)
+                .ifPresent((ButtonType response) -> {
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.close();
+                });
+
     }
 }

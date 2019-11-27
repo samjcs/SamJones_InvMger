@@ -80,7 +80,7 @@ public class AddPartController implements Initializable {
     private void toggleInhousePart(MouseEvent event) {
         if(inhousePartRadio.isSelected()) {
             machineIdAndCompanyLabel.setText("Machine");
-            machineIdAndCompanyField.setText("Machine ID");
+            machineIdAndCompanyField.setPromptText("Machine ID");
         }
     }
 
@@ -88,7 +88,7 @@ public class AddPartController implements Initializable {
     private void toggleOutsourcedPart(MouseEvent event) {
         if (outsourcedPartRadio.isSelected()) {
             machineIdAndCompanyLabel.setText("Company");
-            machineIdAndCompanyField.setText("Company Name");
+            machineIdAndCompanyField.setPromptText("Company Name");
         }
         
     }
